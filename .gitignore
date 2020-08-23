@@ -1,0 +1,6 @@
+*.o
+*.lib
+*.a
+makefile
+hdsMiner
+hdsMiner.exe
