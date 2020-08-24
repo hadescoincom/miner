@@ -72,7 +72,7 @@ uint32_t cmdParser(vector<string> args, string &host, string &port, string &apiC
 			}
 	
 			if (args[i].compare("--version")  == 0) {
-				cout << "1.0 Initial release for HDS main network (Jan 3rd 2019)" << endl;
+				cout << "1.0 Initial release for HDS main network (2020/08)" << endl;
 				exit(0);
 			}
 		}
@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
 
 	cout << "-====================================-" << endl;
 	cout << "   HDS Equihash 150/5 OpenCL miner   " << endl;
-	cout << "          v1.0, Jan 3rd 2019          " << endl;
+	cout << "          v1.0, 2020-08          " << endl;
 	cout << "-====================================-" << endl;
 
 	if (parsing != 0) {
