@@ -276,7 +276,7 @@ bool hdsStratum::hasWork() {
 
 void hdsStratum::Blake2B_HdsIII(WorkDescription * wd) {
 	blake2bInstance blakeInst;
-	blakeInst.init(32,448,5, "Hds-PoW");
+	blakeInst.init(32,448,5, "Hds--PoW");
 
 	uint8_t msg[128] = {0};
 	memcpy(&msg[0], (uint8_t *) &wd->work, 32);
