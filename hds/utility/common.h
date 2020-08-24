@@ -1,4 +1,4 @@
-// Copyright 2018 The Beam Team
+// Copyright 2020 The Hds Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -129,7 +129,7 @@ namespace Cast
 
 
 
-namespace beam
+namespace hds
 {
 	typedef uint64_t Timestamp;
 	typedef uint64_t Height;

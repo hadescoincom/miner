@@ -1,4 +1,4 @@
-// Copyright 2018 The Beam Team
+// Copyright 2020 The Hds Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 #include "uintBig.h"
 
-namespace beam {
+namespace hds {
 
 
 	char ChFromHex(uint8_t v)
@@ -343,4 +343,4 @@ namespace beam {
 		memset0(pDst0 + nDst, nBytes);
 	}
 
-} // namespace beam
+} // namespace hds

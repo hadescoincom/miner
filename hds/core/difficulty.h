@@ -1,4 +1,4 @@
-// Copyright 2018 The Beam Team
+// Copyright 2020 The Hds Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #pragma once
 #include "uintBig.h"
 
-namespace beam
+namespace hds
 {
 	struct Difficulty
 	{
@@ -24,14 +24,14 @@ namespace beam
 
 		Difficulty(uint32_t d = 0) :m_Packed(d) {}
 
-		typedef beam::uintBig_t<32> Raw;
+		typedef hds::uintBig_t<32> Raw;
 
 		// maximum theoretical difficulty value, which corresponds to 'infinite' (only Zero hash value meet the target).
 		// Corresponds to 0xffff...fff raw value.
 		static const uint32_t s_MaxOrder = Raw::nBits - s_MantissaBits - 1;
 		static const uint32_t s_Inf = (s_MaxOrder + 1) << s_MantissaBits;
 
-		bool IsTargetReached(const beam::uintBig_t<32>&) const;
+		bool IsTargetReached(const hds::uintBig_t<32>&) const;
 
 		void Unpack(Raw&) const;
 

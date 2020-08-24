@@ -1,4 +1,4 @@
-// Copyright 2018 The Beam Team
+// Copyright 2020 The Hds Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #pragma once
 #include "common.h"
 
-namespace beam
+namespace hds
 {
 	// Syntactic sugar!
 	enum Zero_ { Zero };
@@ -355,6 +355,6 @@ namespace beam
 	std::ostream& operator << (std::ostream& s, const FourCC& x);
 
 #define ARRAY_ELEMENT_SAFE(arr, index) ((arr)[(((index) < _countof(arr)) ? (index) : (_countof(arr) - 1))])
-#define FOURCC_FROM(name) beam::FourCC::Const<ARRAY_ELEMENT_SAFE(#name,0), ARRAY_ELEMENT_SAFE(#name,1), ARRAY_ELEMENT_SAFE(#name,2), ARRAY_ELEMENT_SAFE(#name,3)>::V
+#define FOURCC_FROM(name) hds::FourCC::Const<ARRAY_ELEMENT_SAFE(#name,0), ARRAY_ELEMENT_SAFE(#name,1), ARRAY_ELEMENT_SAFE(#name,2), ARRAY_ELEMENT_SAFE(#name,3)>::V
 
-} // namespace beam
+} // namespace hds
