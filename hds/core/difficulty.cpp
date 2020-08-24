@@ -1,4 +1,4 @@
-// Copyright 2020 The Hds Team
+// Copyright 2018 The Beam Team
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
 #include "difficulty.h"
 #include <cmath>
 
-namespace hds
+namespace beam
 {
 	void Difficulty::Pack(uint32_t order, uint32_t mantissa)
 	{
@@ -38,7 +38,7 @@ namespace hds
 		mantissa = nLeadingBit | (m_Packed & (nLeadingBit - 1));
 	}
 
-	bool Difficulty::IsTargetReached(const hds::uintBig_t<32>& hv) const
+	bool Difficulty::IsTargetReached(const beam::uintBig_t<32>& hv) const
 	{
 		if (m_Packed > s_Inf)
 			return false; // invalid
@@ -231,4 +231,4 @@ namespace hds
 		return s;
 	}
 
-} // namespace hds
+} // namespace beam
