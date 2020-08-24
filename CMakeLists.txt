@@ -9,7 +9,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(Boost_USE_MULTITHREADED ON)
 set(Boost_USE_STATIC_LIBS ON)
 set(Boost_USE_STATIC_RUNTIME ON)
-find_package(Boost REQUIRED COMPONENTS system date_time regex thread)
+
+set(OPENSSL_USE_STATIC_LIBS TRUE)
+
+find_package(Boost REQUIRED COMPONENTS system date_time thread)
 if(Boost_FOUND)
   include_directories(${Boost_INCLUDE_DIRS})
   link_directories(${Boost_LIBRARY_DIRS})
@@ -33,10 +36,7 @@ endif()
 
 
 find_package(OpenSSL REQUIRED)
-if( OpenSSL_FOUND )
-    if (UNIX)
-        set(OPENSSL_USE_STATIC_LIBS TRUE)
-    endif()
+if( OpenSSL_FOUND )   
     link_directories(${OPENSSL_LIBRARIES})
     include_directories(${OPENSSL_INCLUDE_DIR})
     message(STATUS "Using OpenSSL ${OPENSSL_VERSION}")
@@ -59,10 +59,9 @@ set (HEADERS
 )
 
 set(MINER_SRC
-    hdsStratum.cpp
-    clHost.cpp
     main.cpp
     crypto/sha256.c
+    crypto/blake2b.cpp
     hds/core/difficulty.cpp
     hds/core/uintBig.cpp
     hds/utility/common.cpp
@@ -72,10 +71,22 @@ add_executable(${TARGET_NAME} ${MINER_SRC} ${HEADERS}  )
 
 target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/hds)
 target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/clHeaders)
+target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/clHost)
+target_include_directories(${TARGET_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/solvers)
+
+add_subdirectory(solvers)
+target_link_libraries(${TARGET_NAME} solvers)
+
+add_subdirectory(clHost)
+target_link_libraries(${TARGET_NAME} clHost)
+
+add_subdirectory(stratum)
+target_link_libraries(${TARGET_NAME} stratum)
 
 if(UNIX)
     find_package(Threads)
     target_link_libraries(${TARGET_NAME} Threads::Threads)
+    set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++")
 endif()
 
 if(MSVC)
@@ -88,3 +99,6 @@ endif()
 target_link_libraries(${TARGET_NAME} OpenCL::OpenCL)
 target_link_libraries(${TARGET_NAME} ${OPENSSL_SSL_LIBRARY} ${OPENSSL_CRYPTO_LIBRARY})
 target_link_libraries(${TARGET_NAME} ${Boost_LIBRARIES})
+if(UNIX)
+target_link_libraries(${TARGET_NAME} -ldl)
+endif()

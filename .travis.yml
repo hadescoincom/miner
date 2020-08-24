@@ -111,8 +111,8 @@ before_script:
 
 after_success:
   # deploy using ftp server
-  - BUILDS_SERVER_PATH=${BUILD_SERVER}/files/$TRAVIS_BRANCH/$(date +%Y.%m.%d)/$BUILD_TYPE/$OS_FOLDER
-  - tar -cvzf opencl-miner-$HDS_VERSION.tar.gz --directory=$HOME/build/hadescoincom/opencl-miner hds-opencl-miner equihash_150_5.cl
+  - BUILDS_SERVER_PATH=${BUILD_SERVER}/$TRAVIS_BRANCH/$(date +%Y.%m.%d)/$BUILD_TYPE/$OS_FOLDER
+  - tar -cvzf opencl-miner-$HDS_VERSION.tar.gz --directory=$HOME/build/HdsMW/opencl-miner hds-opencl-miner
 
   # upload binaries to FTP
   - curl --retry 3 --ftp-create-dirs -T opencl-miner-$HDS_VERSION.tar.gz $BUILDS_SERVER_PATH/

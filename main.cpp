@@ -5,6 +5,11 @@
 
 #include "hdsStratum.h"
 #include "clHost.h"
+#include "hdsUtil.h"
+
+// Defining global variables
+const string StrVersionNumber = "v2.0";
+const string StrVersionDate = "April 20th 2020";
 
 inline vector<string> &split(const string &s, char delim, vector<string> &elems) {
     stringstream ss(s);
@@ -21,7 +26,7 @@ inline vector<string> split(const string &s, char delim) {
     return split(s, delim, elems);
 }
 
-uint32_t cmdParser(vector<string> args, string &host, string &port, string &apiCred, bool &debug, bool &cpuMine, vector<int32_t> &devices ) {
+uint32_t cmdParser(vector<string> args, string &host, string &port, string &apiCred, bool &debug, hdsMiner::solverType &forcedSolver, vector<int32_t> &devices) {
 	bool hostSet = false;
 	bool apiSet = false;
 	
@@ -62,9 +67,17 @@ uint32_t cmdParser(vector<string> args, string &host, string &port, string &apiC
 					continue;
 				}
 			}
+			
+			if (args[i].compare("--hdsHashI")  == 0) {
+				forcedSolver = hdsMiner::HdsI;
+			}
 
-			if (args[i].compare("--enable-cpu")  == 0) {
-				cpuMine = true;
+			if (args[i].compare("--hdsHashII")  == 0) {
+				forcedSolver = hdsMiner::HdsII;
+			}
+
+			if (args[i].compare("--hdsHashIII")  == 0) {
+				forcedSolver = hdsMiner::HdsIII;
 			}
 
 			if (args[i].compare("--debug")  == 0) {
@@ -72,7 +85,7 @@ uint32_t cmdParser(vector<string> args, string &host, string &port, string &apiC
 			}
 	
 			if (args[i].compare("--version")  == 0) {
-				cout << "1.0 Initial release for HDS main network (2020/08)" << endl;
+				cout << StrVersionNumber << " for HDS main network " << "(" << StrVersionDate << ")" << endl;
 				exit(0);
 			}
 		}
@@ -97,16 +110,25 @@ int main(int argc, char* argv[]) {
 	string port;
 	string apiCred;
 	bool debug = false;
-	bool cpuMine = false;
+	hdsMiner::solverType forcedSolver = hdsMiner::None;
 	bool useTLS = true;
 	vector<int32_t> devices;
 
-	uint32_t parsing = cmdParser(cmdLineArgs, host, port, apiCred, debug, cpuMine, devices);
+
+	uint32_t parsing = cmdParser(cmdLineArgs, host, port, apiCred, debug, forcedSolver, devices);
 
 	cout << "-====================================-" << endl;
-	cout << "   HDS Equihash 150/5 OpenCL miner   " << endl;
-	cout << "          v1.0, 2020-08          " << endl;
+	cout << "                                      " << endl;
+	cout << "       HdsHash III OpenCL Miner      " << endl;
+	cout << "       version:   " + StrVersionNumber << endl;
+	cout << "       date:      " + StrVersionDate << endl;
+	cout << "                                      " << endl;
 	cout << "-====================================-" << endl;
+	cout << "" << endl;	
+	cout << "Parameters: " << endl;
+	cout << " --server:      " << host << ":" << port << endl;	
+	cout << " --key:         " << apiCred << endl;
+	cout << " --debug:       " << std::boolalpha << debug << endl;
 
 	if (parsing != 0) {
 		if (parsing & 0x1) {
@@ -120,14 +142,17 @@ int main(int argc, char* argv[]) {
 		cout << "Parameters: " << endl;
 		cout << " --help / -h 			Showing this message" << endl;
 		cout << " --server <server>:<port>	The HDS stratum server and port to connect to (required)" << endl;
-		cout << " --key <key>			The HDS stratum server API key (required)" << endl;
+		cout << " --key <key>			The HDS stratum server API key (required), on a Hds mining pool the user name / wallet addres" << endl;
 		cout << " --devices <numbers>		A comma seperated list of devices that should be used for mining (default: all in system)" << endl; 
-		cout << " --enable-cpu			Enable mining on OpenCL CPU devices" << endl;
+		cout << " --hdsHashI			Force mining Hds Hash I" << endl;
+		cout << " --hdsHashII			Force mining Hds Hash II" << endl;
+		cout << " --hdsHashIII			Force mining Hds Hash III" << endl;
+		cout << " --debug			Enable debug mode - verbose stratum information will be displayed" << endl;
 		cout << " --version			Prints the version number" << endl;
 		exit(0);
 	}
 
-	hdsMiner::hdsStratum myStratum(host, port, apiCred, debug);
+	hdsMiner::hdsStratum myStratum(host, port, apiCred, debug, forcedSolver);
 
 	hdsMiner::clHost myClHost;
 	
@@ -135,7 +160,7 @@ int main(int argc, char* argv[]) {
 	cout << "Setup OpenCL devices:" << endl;
 	cout << "=====================" << endl;
 	
-	myClHost.setup(&myStratum, devices, cpuMine);
+	myClHost.setup(&myStratum, devices);
 
 	cout << endl;
 	cout << "Waiting for work from stratum:" << endl;

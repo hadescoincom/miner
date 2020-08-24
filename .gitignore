@@ -2,5 +2,14 @@
 *.lib
 *.a
 makefile
+Makefile
+
 hdsMiner
 hdsMiner.exe
+
+hds-opencl-miner
+hds-opencl-miner.exe
+
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
